@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Checkout - PitStore</title>
+
+        <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" />
+        <link href="/css/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand" href="/">PitStore</a>
+                <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
+                    Menu <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- HEADER -->
+        <header class="masthead bg-primary text-white text-center">
+            <div class="container d-flex align-items-center flex-column">
+                <img class="masthead-avatar mb-5" src="/img/productos/ptlogo.png" alt="PitStore Logo" />
+                <h1 class="masthead-heading text-uppercase mb-0">Checkout</h1>
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <p class="masthead-subheading font-weight-light mb-0">Finaliza tu compra fácilmente</p>
+            </div>
+        </header>
+
+        <!-- FORMULARIO DE COMPRA -->
+        <section class="page-section bg-light text-center">
+            <div class="container">
+                <h2 class="page-section-heading text-uppercase text-secondary mb-4">Resumen de tu compra</h2>
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <form>
+                    <div class="mb-3">
+                        <label for="articleSelect">Selecciona un artículo:</label>
+                        <select class="form-select" id="articleSelect" onchange="updateTotalPrice()">
+                            <option value="halo" data-price="50000">Halógenos Toyota Yaris - ₡50,000</option>
+                            <option value="tornillos" data-price="5000">Tornillos decorativos - ₡5,000</option>
+                            <option value="bota" data-price="35000">Bota aguas Mugen Honda Civic 96-2000 - ₡35,000</option>
+                            <option value="botam" data-price="35000">Bota aguas Mugen Honda Civic 06-08 - ₡35,000</option>
+                            <option value="emblema" data-price="20000">Emblema BMW aros - ₡20,000</option>
+                            <option value="embleman" data-price="6000">Emblema BMW negro - ₡6,000</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity">Cantidad:</label>
+                        <input type="number" class="form-control" id="quantity" min="1" value="1" onchange="updateTotalPrice()">
+                    </div>
+                    <div class="mb-3">
+                        <label>Precio total:</label>
+                        <p id="totalPrice" class="fw-bold">₡50,000.00</p>
+                    </div>
+                </form>
+
+                <!-- Botón para abrir modal -->
+                <div class="mt-4">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#finalizarCompraModal">
+                        <i class="fas fa-check"></i> Finalizar compra
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODAL FINALIZAR COMPRA -->
+        <div id="finalizarCompraModal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <form action="/compra/guardar" method="POST" class="was-validated">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title">Tipo de envío</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="tipoEnvio">Tipo de envío</label>
+                                <select name="tipoEnvio" id="tipoEnvio" class="form-select" onchange="mostrarCamposEnvio()">
+                                    <option value="">-- Selecciona tipo de envío --</option>
+                                    <option value="correos">Correos</option>
+                                    <option value="uber">Uber</option>
+                                    <option value="tienda">Recoger en tienda</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nombreCliente">Nombre del cliente</label>
+                                <input type="text" class="form-control" name="nombreCliente" id="nombreCliente" required>
+                            </div>
+                            <div id="camposDireccion" style="display:none;">
+                                <div class="mb-3">
+                                    <label for="direccion">Dirección</label>
+                                    <input type="text" class="form-control" name="direccion" id="direccion">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="provincia">Provincia</label>
+                                    <input type="text" class="form-control" name="provincia" id="provincia">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="canton">Cantón</label>
+                                    <input type="text" class="form-control" name="canton" id="canton">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="codigoPostal">Código postal</label>
+                                    <input type="text" class="form-control" name="codigoPostal" id="codigoPostal">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                                <i class="fas fa-check-circle"></i> Confirmar compra
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer text-center mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 mb-4">
+                        <h4 class="text-uppercase mb-4">Dirección</h4>
+                        <p class="lead mb-0">Cartago, Costa Rica<br />Barrio las Catalinas</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h4 class="text-uppercase mb-4">Acerca de PitStore</h4>
+                        <p class="lead mb-0">La mejor calidad en accesorios para autos.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- SCRIPT-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+                                    function updateTotalPrice() {
+                                        const article = document.getElementById('articleSelect');
+                                        const quantity = document.getElementById('quantity');
+                                        const total = document.getElementById('totalPrice');
+                                        const price = parseFloat(article.options[article.selectedIndex].dataset.price);
+                                        const qty = parseInt(quantity.value) || 0;
+                                        total.textContent = `₡${(price * qty).toLocaleString('es-CR', {minimumFractionDigits: 2})}`;
+                                    }
+
+                                    function mostrarCamposEnvio() {
+                                        const tipo = document.getElementById('tipoEnvio').value;
+                                        const campos = document.getElementById('camposDireccion');
+                                        const required = (estado) => {
+                                            ['direccion', 'provincia', 'canton', 'codigoPostal'].forEach(id => {
+                                                document.getElementById(id).required = estado;
+                                            });
+                                        };
+
+                                        if (tipo === 'correos' || tipo === 'uber') {
+                                            campos.style.display = 'block';
+                                            required(true);
+                                        } else {
+                                            campos.style.display = 'none';
+                                            required(false);
+                                        }
+                                    }
+        </script>
+
+    </body>
+</html>
+
+
+
+</html>
