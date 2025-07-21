@@ -22,7 +22,7 @@ public class ReviewController {
 
     @PostMapping("/clientes/opinion")
     public String recibirComentario(@RequestParam("comentario") String comentario, Model model) {
-        // Aquí podrías guardar si quisieras, pero ahora solo mostramos el mensaje
+     
         model.addAttribute("mensaje", "¡Tu opinión es válida para nosotros!");
         return "clientes";
     }
